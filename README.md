@@ -16,7 +16,7 @@ Some keychain entries are available regardless of whether the iOS is locked or n
 
 By default keychain_dumper only dumps "Generic" and "Internet" passwords.  This is generally what you are interested in, as most application passwords are stored as "Generic" or "Internet" passwords.  However, you can also pass optional flags to dump additional information from the Keychain.  If you run keychain_dumper with the `-h` option you will get the following usage string:
 
-    Usage: keychain_dumper [-e]|[-h]|[-agnick]
+    Usage: keychain_dumper [-e]|[-h]|[-agnick]|[f]
     <no flags>: Dump Password Keychain Items (Generic Password, Internet Passwords)
     -a: Dump All Keychain Items (Generic Passwords, Internet Passwords, Identities, Certificates, and Keys)
     -e: Dump Entitlements
@@ -25,6 +25,7 @@ By default keychain_dumper only dumps "Generic" and "Internet" passwords.  This 
     -i: Dump Identities
     -c: Dump Certificates
     -k: Dump Keys
+    -f: Specify a filter (only applies to Generic, and Internet passwords)
 
 By default passing no option flags is equivalent to running keychain_dumper with the `-gn` flags set.  The other flags largely allow you to dump additional information related to certificates that are installed on the device.
 

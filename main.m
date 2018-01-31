@@ -84,7 +84,7 @@ void printCertPEM(NSData *data) {
 }
 
 void printUsage() {
-	printToStdOut(@"Usage: keychain_dumper [-e]|[-h]|[-agnick]\n");
+	printToStdOut(@"Usage: keychain_dumper [-e]|[-h]|[-agnick]|[f]\n");
 	printToStdOut(@"<no flags>: Dump Password Keychain Items (Generic Password, Internet Passwords)\n");
 	printToStdOut(@"-a: Dump All Keychain Items (Generic Passwords, Internet Passwords, Identities, Certificates, and Keys)\n");
 	printToStdOut(@"-e: Dump Entitlements\n");
