@@ -249,7 +249,8 @@ NSString * getEmptyKeychainItemString(CFTypeRef kSecClassType) {
 
 void printGenericPassword(NSDictionary *passwordItem) {
 	if (![filter isEqualToString:@""]) {
-		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter]) {
+		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter] && 
+			![[passwordItem objectForKey:(id)kSecAttrService] containsString:filter]) {
 			return;
 		}
 	}
@@ -290,7 +291,8 @@ void printGenericPassword(NSDictionary *passwordItem) {
 
 void printInternetPassword(NSDictionary *passwordItem) {
 	if (![filter isEqualToString:@""]) {
-		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter]) {
+		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter] && 
+			![[passwordItem objectForKey:(id)kSecAttrServer] containsString:filter]) {
 			return;
 		}
 	}
