@@ -247,10 +247,31 @@ NSString * getEmptyKeychainItemString(CFTypeRef kSecClassType) {
 	
 }
 
+//compares two strings, and returns a boolean value for success/failure
+bool containsNeedle(NSString *haystack, NSString *needle) {
+	bool result = false;
+
+	if([haystack isKindOfClass:[NSString class]]) {
+		NSRange range = [haystack rangeOfString: needle options: NSCaseInsensitiveSearch];
+
+		if (range.location != NSNotFound) {
+			result = true;
+		}
+	}
+
+	return result;
+}
+
 void printGenericPassword(NSDictionary *passwordItem) {
+	//password assigned here, so it can be used in the filter
+	NSData* passwordData = [passwordItem objectForKey:(id)kSecValueData];
+	NSString* password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
+
 	if (![filter isEqualToString:@""]) {
-		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter] && 
-			![[passwordItem objectForKey:(id)kSecAttrService] containsString:filter]) {
+		if (!containsNeedle([passwordItem objectForKey:(id)kSecAttrAccessGroup], filter) &&
+			!containsNeedle([passwordItem objectForKey:(id)kSecAttrService], filter) &&
+			!containsNeedle([passwordItem objectForKey:(id)kSecAttrAccount], filter) &&
+			!containsNeedle(password, filter)) {
 			return;
 		}
 	}
@@ -266,33 +287,38 @@ void printGenericPassword(NSDictionary *passwordItem) {
 		printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
 	}
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
-        }
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
+    }
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
-        }
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
+    }
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
-        }
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
+    }
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
-        }
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
+    }
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
-        }
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
+    }
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
-        }
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
+    }
 
 	printToStdOut(@"Generic Field: %@\n", [[passwordItem objectForKey:(id)kSecAttrGeneric] description]);
-	NSData* passwordData = [passwordItem objectForKey:(id)kSecValueData];
-	printToStdOut(@"Keychain Data: %@\n\n", [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding]);
+	printToStdOut(@"Keychain Data: %@\n\n", password);
 }
 
 void printInternetPassword(NSDictionary *passwordItem) {
+	//password assigned here, so it can be used in the filter
+	NSData* passwordData = [passwordItem objectForKey:(id)kSecValueData];
+	NSString* password = [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding];
+
 	if (![filter isEqualToString:@""]) {
-		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter] && 
-			![[passwordItem objectForKey:(id)kSecAttrServer] containsString:filter]) {
+		if (!containsNeedle([passwordItem objectForKey:(id)kSecAttrAccessGroup], filter) &&
+			!containsNeedle([passwordItem objectForKey:(id)kSecAttrServer], filter) &&
+			!containsNeedle([passwordItem objectForKey:(id)kSecAttrAccount], filter) &&
+			!containsNeedle(password, filter)) {
 			return;
 		}
 	}
@@ -305,31 +331,29 @@ void printInternetPassword(NSDictionary *passwordItem) {
 	printToStdOut(@"Label: %@\n", [passwordItem objectForKey:(id)kSecAttrLabel]);
 
 
-        if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ck"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
-        }
-        else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
-        }
-        else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
-        }
-        else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
-        }
-        else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
-        }
-        else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
-        }
-        else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
-        }
+    if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ck"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
+    }
+    else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
+    }
+    else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
+    }
+    else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
+    }
+    else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
+    }
+    else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
+    }
+    else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
+    }
 
-
-	NSData* passwordData = [passwordItem objectForKey:(id)kSecValueData];
-	printToStdOut(@"Keychain Data: %@\n\n", [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding]);
+	printToStdOut(@"Keychain Data: %@\n\n", password);
 }
 
 
