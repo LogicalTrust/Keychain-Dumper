@@ -28,6 +28,14 @@ By default keychain_dumper only dumps "Generic" and "Internet" passwords.  This 
 
 By default passing no option flags is equivalent to running keychain_dumper with the `-gn` flags set.  The other flags largely allow you to dump additional information related to certificates that are installed on the device.
 
+### Filtering Examples
+
+Show passwords relating to app:
+    ./keychain_dumper -f "exmaple"
+
+Show access points
+    ./keychain_dumper -f "AirPort"
+
 ## Changes since original project
 
 - Display protection classes - https://github.com/ptoomey3/Keychain-Dumper/pull/29
