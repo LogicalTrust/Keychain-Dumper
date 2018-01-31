@@ -93,6 +93,7 @@ void printUsage() {
 	printToStdOut(@"-i: Dump Identities\n");
 	printToStdOut(@"-c: Dump Certificates\n");
 	printToStdOut(@"-k: Dump Keys\n");
+	printToStdOut(@"-f: Specify a filter (only applies to Generic, and Internet passwords)\n");
 }
 
 void dumpKeychainEntitlements() {
@@ -139,6 +140,8 @@ void dumpKeychainEntitlements() {
 }
 
 
+NSString *filter = @"";
+
 NSMutableArray *getCommandLineOptions(int argc, char **argv) {
 	NSMutableArray *arguments = [[NSMutableArray alloc] init];
 	int argument;
@@ -147,7 +150,8 @@ NSMutableArray *getCommandLineOptions(int argc, char **argv) {
 		[arguments addObject:(id)kSecClassInternetPassword];
 		return [arguments autorelease];
 	}
-	while ((argument = getopt (argc, argv, "aegnickh")) != -1) {
+
+	while ((argument = getopt (argc, argv, "aegnickf:h")) != -1) {
 		switch (argument) {
 			case 'a':
 				[arguments addObject:(id)kSecClassGenericPassword];
@@ -174,6 +178,19 @@ NSMutableArray *getCommandLineOptions(int argc, char **argv) {
 				break;
 			case 'k':
 				[arguments addObject:(id)kSecClassKey];
+				break;
+			case 'f':
+				filter = [NSString stringWithFormat:@"%s", optarg];
+				printToStdOut(@"----------------\n");
+				printToStdOut(@"Using filter: %@\n", filter);	
+				printToStdOut(@"----------------\n\n");
+
+				//if not other options, go with default options
+				if (argc == 3) {
+					[arguments addObject:(id)kSecClassGenericPassword];
+					[arguments addObject:(id)kSecClassInternetPassword];
+					return [arguments autorelease];
+				}
 				break;
 			case 'h':
 				printUsage();
@@ -231,6 +248,12 @@ NSString * getEmptyKeychainItemString(CFTypeRef kSecClassType) {
 }
 
 void printGenericPassword(NSDictionary *passwordItem) {
+	if (![filter isEqualToString:@""]) {
+		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter]) {
+			return;
+		}
+	}
+
 	printToStdOut(@"Generic Password\n");
 	printToStdOut(@"----------------\n");
 	printToStdOut(@"Service: %@\n", [passwordItem objectForKey:(id)kSecAttrService]);
@@ -266,6 +289,12 @@ void printGenericPassword(NSDictionary *passwordItem) {
 }
 
 void printInternetPassword(NSDictionary *passwordItem) {
+	if (![filter isEqualToString:@""]) {
+		if (![[passwordItem objectForKey:(id)kSecAttrAccessGroup] containsString:filter]) {
+			return;
+		}
+	}
+
 	printToStdOut(@"Internet Password\n");
 	printToStdOut(@"-----------------\n");
 	printToStdOut(@"Server: %@\n", [passwordItem objectForKey:(id)kSecAttrServer]);
