@@ -31,9 +31,11 @@ By default passing no option flags is equivalent to running keychain_dumper with
 ### Filtering Examples
 
 Show passwords relating to app:
+
     ./keychain_dumper -f "exmaple"
 
 Show access points
+
     ./keychain_dumper -f "AirPort"
 
 ## Changes since original project
