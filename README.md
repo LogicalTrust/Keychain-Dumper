@@ -32,9 +32,9 @@ By default passing no option flags is equivalent to running keychain_dumper with
 
 Show passwords relating to app:
 
-    ./keychain_dumper -f "exmaple"
+    ./keychain_dumper -f "myapp"
 
-Show access points
+Show access points:
 
     ./keychain_dumper -f "AirPort"
 
