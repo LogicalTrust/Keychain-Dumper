@@ -139,7 +139,6 @@ void dumpKeychainEntitlements() {
 	}
 }
 
-
 NSString *filter = @"";
 
 NSMutableArray *getCommandLineOptions(int argc, char **argv) {
@@ -287,7 +286,7 @@ void printGenericPassword(NSDictionary *passwordItem) {
 		printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
 	}
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
-        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
+		printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
     }
 	else if ([[passwordItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
         printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
@@ -356,12 +355,12 @@ void printInternetPassword(NSDictionary *passwordItem) {
 	printToStdOut(@"Keychain Data: %@\n\n", password);
 }
 
-
 void printCertificate(NSDictionary *certificateItem) {
 	SecCertificateRef certificate = (SecCertificateRef)[certificateItem objectForKey:(id)kSecValueRef];
 
 	CFStringRef summary;
 	summary = SecCertificateCopySubjectSummary(certificate);
+
 	printToStdOut(@"Certificate\n");
 	printToStdOut(@"-----------\n");
 	printToStdOut(@"Summary: %@\n", (NSString *)summary);
@@ -370,28 +369,27 @@ void printCertificate(NSDictionary *certificateItem) {
 	printToStdOut(@"Label: %@\n", [certificateItem objectForKey:(id)kSecAttrLabel]);
 
 
-        if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ck"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
-        }
-        else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
-        }
-        else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
-        }
-        else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
-        }
-        else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
-        }
-        else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
-        }
-        else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
-        }
-
+    if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ck"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
+    }
+    else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
+    }
+    else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
+    }
+    else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
+    }
+    else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
+    }
+    else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
+    }
+    else if ([[certificateItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
+    }
 
 	printToStdOut(@"Serial Number: %@\n", [certificateItem objectForKey:(id)kSecAttrSerialNumber]);
 	printToStdOut(@"Subject Key ID: %@\n", [certificateItem objectForKey:(id)kSecAttrSubjectKeyID]);
@@ -403,7 +401,7 @@ void printCertificate(NSDictionary *certificateItem) {
 void printKey(NSDictionary *keyItem) {
 	NSString *keyClass = @"Unknown";
 	CFTypeRef _keyClass = [keyItem objectForKey:(id)kSecAttrKeyClass];
- int keySize=[[keyItem objectForKey:(id)kSecAttrKeySizeInBits] intValue];
+	int keySize=[[keyItem objectForKey:(id)kSecAttrKeySizeInBits] intValue];
 
 	if ([[(id)_keyClass description] isEqual:(id)kSecAttrKeyClassPublic]) {
 		keyClass = @"Public";
@@ -421,48 +419,51 @@ void printKey(NSDictionary *keyItem) {
 	printToStdOut(@"Label: %@\n", [keyItem objectForKey:(id)kSecAttrLabel]);
 
 
-        if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ck"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
-        }
-        else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
-        }
-        else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
-        }
-        else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
-        }
-        else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
-        }
-        else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
-        }
-        else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
-                printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
-        }
+    if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ck"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlock\n");
+    }
+    else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"ak"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlocked\n");
+    }
+    else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dk"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlways\n");
+    }
+    else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"aku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenUnlockedThisDeviceOnly\n");
+    }
+    else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"cku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly\n");
+    }
+    else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"dku"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleAlwaysThisDeviceOnly\n");
+    }
+    else if ([[keyItem objectForKey:(id)kSecAttrAccessible] isEqualToString:@"akpu"]) {
+        printToStdOut(@"Keychain protection class: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly\n");
+    }
 
 
 	printToStdOut(@"Application Label: %@\n", [keyItem objectForKey:(id)kSecAttrApplicationLabel]);
 	printToStdOut(@"Key Class: %@\n", keyClass);
- if (keySize) {
-  printToStdOut(@"Permanent Key: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrIsPermanent]) == true ? @"True" : @"False");
- }
-printToStdOut(@"Key Size: %@\n", [keyItem objectForKey:(id)kSecAttrKeySizeInBits]);
-	printToStdOut(@"Effective Key Size: %@\n", [keyItem objectForKey:(id)kSecAttrEffectiveKeySize]);
- if (keySize) {
-	 printToStdOut(@"For Encryption: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanEncrypt]) == true ? @"True" : @"False");
- 	printToStdOut(@"For Decryption: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanDecrypt]) == true ? @"True" : @"False");
- 	printToStdOut(@"For Key Derivation: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanDerive]) == true ? @"True" : @"False");
- 	printToStdOut(@"For Signatures: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanSign]) == true ? @"True" : @"False");
- 	printToStdOut(@"For Signature Verification: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanVerify]) == true ? @"True" : @"False");
- 	printToStdOut(@"For Key Wrapping: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanWrap]) == true ? @"True" : @"False");
- 	printToStdOut(@"For Key Unwrapping: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanUnwrap]) == true ? @"True" : @"False");
-	printKeyPEM(keyItem[@"v_Data"]);
- }
- printToStdOut(@"\n");
 
+	if (keySize) {
+		printToStdOut(@"Permanent Key: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrIsPermanent]) == true ? @"True" : @"False");
+	}
+
+	printToStdOut(@"Key Size: %@\n", [keyItem objectForKey:(id)kSecAttrKeySizeInBits]);
+	printToStdOut(@"Effective Key Size: %@\n", [keyItem objectForKey:(id)kSecAttrEffectiveKeySize]);
+
+ 	if (keySize) {
+		printToStdOut(@"For Encryption: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanEncrypt]) == true ? @"True" : @"False");
+	 	printToStdOut(@"For Decryption: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanDecrypt]) == true ? @"True" : @"False");
+	 	printToStdOut(@"For Key Derivation: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanDerive]) == true ? @"True" : @"False");
+	 	printToStdOut(@"For Signatures: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanSign]) == true ? @"True" : @"False");
+	 	printToStdOut(@"For Signature Verification: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanVerify]) == true ? @"True" : @"False");
+	 	printToStdOut(@"For Key Wrapping: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanWrap]) == true ? @"True" : @"False");
+	 	printToStdOut(@"For Key Unwrapping: %@\n", CFBooleanGetValue((CFBooleanRef)[keyItem objectForKey:(id)kSecAttrCanUnwrap]) == true ? @"True" : @"False");
+		printKeyPEM(keyItem[@"v_Data"]);
+ 	}
+
+ 	printToStdOut(@"\n");
 }
 
 void printIdentity(NSDictionary *identityItem) {
@@ -503,6 +504,7 @@ void printResultsForSecClass(NSArray *keychainItems, CFTypeRef kSecClassType) {
 			printKey(keychainItem);
 		}
 	}
+
 	return;
 }
 
