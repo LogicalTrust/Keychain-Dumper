@@ -1,13 +1,5 @@
 # Keychain Dumper
 
-Added feature to display protection classes.
-
-## Included changes
-
-- Display protection classes - https://github.com/ptoomey3/Keychain-Dumper/pull/29
-- Extract certificates - https://github.com/ptoomey3/Keychain-Dumper/pull/18
-- Fix segfaults for empty keys - https://github.com/ptoomey3/Keychain-Dumper/pull/12
-
 ## Usage
 
 All that should be needed to use keychain_dumper is the binary that is checked in to the Keychain-Dumper Git repository.  This binary has been signed with a self-signed certificate with a "wildcard" entitlement that should grant keychain_dumper access to all Keychain items that would have been granted had the tool been signed with each individual entitlement.  If you either don't trust this binary or are having trouble dumping Keychain items using the below steps, you may can build the tool from source and manually sign the appropriate entitlments into your build of the keychain_dumper binary.
@@ -24,7 +16,7 @@ Some keychain entries are available regardless of whether the iOS is locked or n
 
 By default keychain_dumper only dumps "Generic" and "Internet" passwords.  This is generally what you are interested in, as most application passwords are stored as "Generic" or "Internet" passwords.  However, you can also pass optional flags to dump additional information from the Keychain.  If you run keychain_dumper with the `-h` option you will get the following usage string:
 
-    Usage: keychain_dumper [-e]|[-h]|[-agnick]
+    Usage: keychain_dumper [-e]|[-h]|[-agnick]|[f]
     <no flags>: Dump Password Keychain Items (Generic Password, Internet Passwords)
     -a: Dump All Keychain Items (Generic Passwords, Internet Passwords, Identities, Certificates, and Keys)
     -e: Dump Entitlements
@@ -33,8 +25,26 @@ By default keychain_dumper only dumps "Generic" and "Internet" passwords.  This 
     -i: Dump Identities
     -c: Dump Certificates
     -k: Dump Keys
+    -f: Specify a filter (only applies to Generic, and Internet passwords)
 
 By default passing no option flags is equivalent to running keychain_dumper with the `-gn` flags set.  The other flags largely allow you to dump additional information related to certificates that are installed on the device.
+
+### Filtering Examples
+
+Show passwords relating to app:
+
+    ./keychain_dumper -f "myapp"
+
+Show access points:
+
+    ./keychain_dumper -f "AirPort"
+
+## Changes since original project
+
+- Display protection classes - https://github.com/ptoomey3/Keychain-Dumper/pull/29
+- Extract certificates - https://github.com/ptoomey3/Keychain-Dumper/pull/18
+- Fix segfaults for empty keys - https://github.com/ptoomey3/Keychain-Dumper/pull/12
+- Specify a filter (only applies to Generic and Internet passwords)
 
 ## Building
 
